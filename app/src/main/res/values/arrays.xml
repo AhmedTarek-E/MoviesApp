@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sorting_preference_entries">
+        <item>Most Popular</item>
+        <item>Top Rated</item>
+    </string-array>
+
+    <string-array name="sorting_preference_values">
+        <item>@string/popular_sorted</item>
+        <item>@string/top_rated_sorted</item>
+    </string-array>
+</resources>

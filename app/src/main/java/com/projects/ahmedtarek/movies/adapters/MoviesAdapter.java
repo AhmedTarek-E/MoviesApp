@@ -19,8 +19,9 @@ import java.util.List;
  * Created by Ahmed Tarek on 10/15/2016.
  */
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
-    List<Movie> moviesList;
-    Context context;
+    private List<Movie> moviesList;
+    private Context context;
+    private int mSelectedMoviePosition = -1;
 
     public MoviesAdapter(Context context, List<Movie> moviesList) {
         this.moviesList = moviesList;
@@ -53,6 +54,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         return moviesList.size();
     }
 
+    private void setmSelectedMoviePosition(int position) {
+        mSelectedMoviePosition = position;
+    }
+
+    public int getmSelectedMoviePosition() {
+        return mSelectedMoviePosition;
+    }
+
     public Movie getItem(int position) {
         return moviesList.get(position);
     }
@@ -70,9 +79,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         public void onClick(View view) {
             if (view instanceof ImageView) {
                 int position = getLayoutPosition();
-                //Utility.setSelectedMovie(moviesList.get(position));
+                setmSelectedMoviePosition(position);
                 OnMovieSelectedListener listener = (OnMovieSelectedListener) context;
-                listener.onMovieSelectedListener(getItem(position));
+                listener.onMovieSelected(getItem(position));
             }
         }
     }

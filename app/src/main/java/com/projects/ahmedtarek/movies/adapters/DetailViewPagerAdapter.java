@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Ahmed Tarek on 11/29/2016.
  */
-public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
+public class DetailViewPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
 

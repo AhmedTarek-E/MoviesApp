@@ -10,7 +10,6 @@
         android:padding="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Batman v Superman: Dawn of Justice"
         android:textSize="36sp"
         android:textStyle="bold"
         android:background="@color/primaryLight"

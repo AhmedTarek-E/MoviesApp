@@ -1,17 +1,25 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="action_settings">Settings</string>
+
     <string name="popular_sorted">popular</string>
     <string name="top_rated_sorted">top_rated</string>
+    <string name="favorite_sorted">favorites</string>
+
     <string name="sorting_key" translatable="false">sorting_base</string>
     <string name="sort_title">Sorting Method</string>
     <string name="on_change_sorting_key">on_change_sorting</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="overview_title">Plot Synopsis:</string>
     <string name="release_date">Release Date:&#160;</string>
+
     <string name="popular_option">Popular</string>
     <string name="top_rated_option">Top Rated</string>
+    <string name="favorites_option">Favorites</string>
+
     <string name="trailers">Trailers</string>
     <string name="reviews">Reviews</string>
     <string name="author_text">Written by&#160;</string>
+    <string name="marked_as_fav">Marked as favorite</string>
+    <string name="not_marked_as_fav">Mark as favorite</string>
 </resources>

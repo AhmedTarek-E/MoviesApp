@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
-                view.setBackgroundResource(R.drawable.sort_view_shape);
+                view.setBackgroundResource(R.drawable.sort_arrow_selected);
             }
         });
         toolbar.addView(sortButton);
@@ -48,13 +48,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         // check if tablet
         if (findViewById(R.id.details_container) != null) {
             mTwoPane = true;
-
-            DetailFragment detailFragment = new DetailFragment();
-            detailFragment.setArguments(null);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.details_container, detailFragment, DetailFragment.DETAIL_FRAGMENT_TAG)
-                    .commit();
+            if (savedInstanceState == null) {
+                DetailFragment detailFragment = new DetailFragment();
+                detailFragment.setArguments(null);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.details_container, detailFragment, DetailFragment.DETAIL_FRAGMENT_TAG)
+                        .commit();
+            }
         } else {
             mTwoPane = false;
         }
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
             @Override
             public void onDismiss(PopupMenu menu) {
-                sortButton.setBackgroundResource(R.color.transparent);
+                sortButton.setBackgroundResource(R.drawable.sort_arrow);
             }
         });
     }
@@ -85,12 +86,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        /*int id = item.getItemId();
         switch (id) {
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
@@ -106,12 +107,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.action_top_rated:
                 newSortMethod = getString(R.string.top_rated_sorted);
                 break;
+            case R.id.action_favorites:
+                newSortMethod = getString(R.string.favorite_sorted);
         }
         if (newSortMethod != null && !currentSortingMethod.equals(newSortMethod)) {
             sortButton.setText(Utility.formatSortString(newSortMethod));
             OnSortChangeListener mf = (MoviesFragment)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_movies);
-            mf.onSortChangeListener(newSortMethod);
+            mf.onSortChange(newSortMethod);
             currentSortingMethod = newSortMethod;
             return true;
         }
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     @Override
-    public void onMovieSelectedListener(Movie movie) {
+    public void onMovieSelected(Movie movie) {
         Bundle args = new Bundle();
         args.putSerializable(DetailFragment.MOVIE_KEY, movie);
 

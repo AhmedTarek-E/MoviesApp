@@ -29,6 +29,7 @@ import com.projects.ahmedtarek.movies.models.Review;
 import com.projects.ahmedtarek.movies.models.Trailer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailFragment extends Fragment implements OnMovieParsedListener {
@@ -54,11 +55,17 @@ public class DetailFragment extends Fragment implements OnMovieParsedListener {
         if (movie == null)
             return null;
 
-        new GetMovieTask(getActivity(), this, movie).execute(movie.getMovieID());
-
         titleView = (TextView) rootView.findViewById(R.id.titleView);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
+
+        if (savedInstanceState == null) {
+            new GetMovieTask(getActivity(), this, movie).execute(movie.getMovieID());
+        } else {
+            List<Movie> movieList = new ArrayList<>();
+            movieList.add(movie);
+            onParsedItem(movieList);
+        }
 
         titleView.setText(movie.getOriginalTitle());
 
@@ -66,7 +73,7 @@ public class DetailFragment extends Fragment implements OnMovieParsedListener {
     }
 
     private void setupViewPager(ViewPager viewPager, Movie movie) {
-        DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getFragmentManager());
+        DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getChildFragmentManager());
 
         Bundle args = new Bundle();
         args.putSerializable(MOVIE_KEY, movie);

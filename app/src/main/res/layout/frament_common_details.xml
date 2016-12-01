@@ -27,9 +27,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:src="@drawable/placeholder"
                 android:adjustViewBounds="true"
-                android:layout_margin="@dimen/activity_vertical_margin"/>
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:src="@drawable/placeholder"/>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -42,36 +42,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/yearTextView"
-                    android:text="2016"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/durationTextView"
-                    android:text="180 min"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/rateTextView"
-                    android:text="7.8/10"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/releaseDateTextView"
-                    android:text="Release Date: 2016/3/24"
                     />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/favButton"
-                    android:text="Mark as favorite"
-                    />
+                    android:id="@+id/favButton" />
 
             </LinearLayout>
         </LinearLayout>
@@ -80,7 +74,6 @@
             android:id="@+id/plotView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ben Affleck heard martha and stopped attacking superman"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/secondaryText"
             android:layout_marginTop="@dimen/activity_vertical_margin"

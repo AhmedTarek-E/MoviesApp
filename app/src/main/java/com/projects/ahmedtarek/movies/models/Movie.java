@@ -14,7 +14,6 @@ public class Movie implements Serializable {
     private double voteAverage;
     private String releaseDate;
     private String movieID;
-    private String duration;
     private List<Trailer> trailers = new ArrayList<>();
     private List<Review> reviews = new ArrayList<>();
 
@@ -64,14 +63,6 @@ public class Movie implements Serializable {
 
     public String getMovieID() {
         return movieID;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
     }
 
     public void addTrailer(Trailer trailer) {

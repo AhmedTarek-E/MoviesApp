@@ -2,6 +2,7 @@ package com.projects.ahmedtarek.movies.fragments;
 
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -55,9 +56,9 @@ public class DetailFragment extends Fragment implements OnMovieParsedListener {
         if (movie == null)
             return null;
 
-        titleView = (TextView) rootView.findViewById(R.id.titleView);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
+        titleView = (TextView) rootView.findViewById(R.id.titleView);
 
         if (savedInstanceState == null) {
             new GetMovieTask(getActivity(), this, movie).execute(movie.getMovieID());
@@ -66,8 +67,11 @@ public class DetailFragment extends Fragment implements OnMovieParsedListener {
             movieList.add(movie);
             onParsedItem(movieList);
         }
-
-        titleView.setText(movie.getOriginalTitle());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            titleView.setText(movie.getOriginalTitle());
+        } else {
+            titleView.setHeight(1);
+        }
 
         return rootView;
     }

@@ -9,4 +9,9 @@
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="overview_title">Plot Synopsis:</string>
     <string name="release_date">Release Date:&#160;</string>
+    <string name="popular_option">Popular</string>
+    <string name="top_rated_option">Top Rated</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
+    <string name="author_text">Written by&#160;</string>
 </resources>

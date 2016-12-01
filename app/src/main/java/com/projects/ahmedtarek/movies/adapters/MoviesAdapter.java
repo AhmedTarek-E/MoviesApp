@@ -1,7 +1,6 @@
-package com.projects.ahmedtarek.movies;
+package com.projects.ahmedtarek.movies.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +9,20 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.projects.ahmedtarek.movies.models.Movie;
+import com.projects.ahmedtarek.movies.interfaces.OnMovieSelectedListener;
+import com.projects.ahmedtarek.movies.R;
 
 import java.util.List;
 
 /**
  * Created by Ahmed Tarek on 10/15/2016.
  */
-public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
     List<Movie> moviesList;
     Context context;
 
-    public CardsAdapter(Context context, List<Movie> moviesList) {
+    public MoviesAdapter(Context context, List<Movie> moviesList) {
         this.moviesList = moviesList;
         this.context = context;
     }
@@ -29,8 +31,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -52,6 +53,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         return moviesList.size();
     }
 
+    public Movie getItem(int position) {
+        return moviesList.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
 
@@ -65,8 +70,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         public void onClick(View view) {
             if (view instanceof ImageView) {
                 int position = getLayoutPosition();
-                Movie.setSelectedMovie(moviesList.get(position));
-                context.startActivity(new Intent(context, MovieDetailActivity.class));
+                //Utility.setSelectedMovie(moviesList.get(position));
+                OnMovieSelectedListener listener = (OnMovieSelectedListener) context;
+                listener.onMovieSelectedListener(getItem(position));
             }
         }
     }

@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    tools:context="com.projects.ahmedtarek.movies.MainActivityFragment"
+    tools:context=".fragments.MoviesFragment"
     tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.RecyclerView

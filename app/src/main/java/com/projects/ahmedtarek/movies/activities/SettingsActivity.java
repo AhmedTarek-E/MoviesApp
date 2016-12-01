@@ -1,4 +1,4 @@
-package com.projects.ahmedtarek.movies;
+package com.projects.ahmedtarek.movies.activities;
 
 import android.content.SharedPreferences;
 import android.preference.ListPreference;
@@ -7,6 +7,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.projects.ahmedtarek.movies.R;
 
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {

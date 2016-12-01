@@ -1,28 +1,29 @@
-package com.projects.ahmedtarek.movies;
+package com.projects.ahmedtarek.movies.models;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ahmed Tarek on 10/15/2016.
  */
-public class Movie {
+public class Movie implements Serializable {
     private String moviePoster;
     private String originalTitle;
     private String overview;
     private double voteAverage;
     private String releaseDate;
     private String movieID;
-    private static Movie selectedMovie = null;
+    private String duration;
+    private List<Trailer> trailers = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 
-    public Movie(String moviePoster, String movieID) {
-        this.moviePoster = moviePoster;
+    public Movie(String movieID) {
         this.movieID = movieID;
     }
 
-    public static Movie getSelectedMovie() {
-        return selectedMovie;
-    }
-
-    public static void setSelectedMovie(Movie selectedMovie) {
-        Movie.selectedMovie = selectedMovie;
+    public void setMoviePoster(String moviePoster) {
+        this.moviePoster = moviePoster;
     }
 
     public void setOriginalTitle(String originalTitle) {
@@ -63,5 +64,29 @@ public class Movie {
 
     public String getMovieID() {
         return movieID;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public void addTrailer(Trailer trailer) {
+        trailers.add(trailer);
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public List<Trailer> getTrailers() {
+        return trailers;
     }
 }

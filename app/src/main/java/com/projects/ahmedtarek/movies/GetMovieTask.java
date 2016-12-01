@@ -1,14 +1,17 @@
 package com.projects.ahmedtarek.movies;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.projects.ahmedtarek.movies.interfaces.OnMovieParsedListener;
+import com.projects.ahmedtarek.movies.models.Movie;
+import com.projects.ahmedtarek.movies.models.Review;
+import com.projects.ahmedtarek.movies.models.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,16 +29,22 @@ import java.util.List;
 
 /**
  * Created by Ahmed Tarek on 10/19/2016.
+ *
+ * this AsyncTask has two purposes, only one to do at a time
+ * 1 - to get all movies when no ID param is passed
+ * 2 - to get reviews and trailers for a specific movie
  */
-public class GetMovieTask extends AsyncTask<Void, Void, List<Movie>> {
-    private OnParsedItemListener listener;
+public class GetMovieTask extends AsyncTask<String, Void, List<Movie>> {
+    private OnMovieParsedListener listener;
     private final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     private final String API_QUERY = "api_key";
     private Context context;
     private final String TAG = "GetMovieTask";
     private final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+    private final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch?";
+    private final String KEY_QUERY = "v";
 
-    // Attributes
+    // Movie Attributes
     private final String POSTER_PATH = "poster_path";
     private final String PLOT_SYNOPSIS = "overview";
     private final String RELEASE_DATE = "release_date";
@@ -43,10 +52,26 @@ public class GetMovieTask extends AsyncTask<Void, Void, List<Movie>> {
     private final String ORIGINAL_TITLE = "original_title";
     private final String RATE = "vote_average";
     private boolean isConnectedToInternet = true;
+    private Movie movie;
 
-    public GetMovieTask(Context context, OnParsedItemListener listener) {
+    // Trailer Attributes
+    private final String TRAILER_KEY = "key";
+    private final String TRAILER_NAME = "name";
+
+    // Reviews Attributes
+    private final String REVIEW_AUTHOR = "author";
+    private final String REVIEW_URL = "url";
+    private final String REVIEW_CONTENT = "content";
+
+    public GetMovieTask(Context context, OnMovieParsedListener listener) {
         this.listener = listener;
         this.context = context;
+    }
+
+    public GetMovieTask(Context context, OnMovieParsedListener listener, Movie movie) {
+        this.listener = listener;
+        this.context = context;
+        this.movie = movie;
     }
 
     @Override
@@ -58,11 +83,28 @@ public class GetMovieTask extends AsyncTask<Void, Void, List<Movie>> {
     }
 
     @Override
-    protected List<Movie> doInBackground(Void... params) {
+    protected List<Movie> doInBackground(String... params) {
         if (!isConnectedToInternet)
             return null;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String sortingMethod = prefs.getString(context.getString(R.string.sorting_key), context.getString(R.string.popular_sorted));
+
+        if (params.length != 0) {
+            // this means a movieId has been passed
+
+            String movieId = params[0];
+
+            String jsonString = getJsonString(getTrailersUrl(movieId));
+            if (jsonString != null)
+                getMovieTrailers(movie, jsonString);
+
+            jsonString = getJsonString(getReviewsUrl(movieId));
+            if (jsonString != null)
+                getMovieReviews(movie, jsonString);
+
+            List<Movie> result = new ArrayList<>();
+            result.add(movie);
+            return result;
+        }
+        String sortingMethod = Utility.getPreferredSortOrder(context);
 
         Uri urlBuilder = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(sortingMethod)
@@ -83,18 +125,52 @@ public class GetMovieTask extends AsyncTask<Void, Void, List<Movie>> {
         }
     }
 
+    private void getMovieTrailers(Movie movie, String jsonString) {
+        try {
+            JSONArray trailers = new JSONObject(jsonString).getJSONArray("results");
+            for(int i = 0 ; i < trailers.length() ; i++) {
+                JSONObject object = trailers.getJSONObject(i);
+                Trailer trailer = new Trailer();
+                trailer.setName(object.getString(TRAILER_NAME));
+                Uri uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon()
+                        .appendQueryParameter(KEY_QUERY, object.getString(TRAILER_KEY))
+                        .build();
+                trailer.setUrl(uri.toString());
+                movie.addTrailer(trailer);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getMovieReviews(Movie movie, String jsonString) {
+        try {
+            JSONArray reviews = new JSONObject(jsonString).getJSONArray("results");
+            for(int i = 0 ; i < reviews.length() ; i++) {
+                JSONObject object = reviews.getJSONObject(i);
+                Review review = new Review();
+                review.setAuthor(object.getString(REVIEW_AUTHOR));
+                review.setUrl(object.getString(REVIEW_URL));
+                review.setContent(object.getString(REVIEW_CONTENT));
+                movie.addReview(review);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private List<Movie> getMoviesList(String jsonString) {
         List<Movie> movies = new ArrayList<>();
         try {
             JSONArray allMovies = new JSONObject(jsonString).getJSONArray("results");
             for (int i = 0 ; i < allMovies.length() ; i++) {
                 JSONObject object = allMovies.getJSONObject(i);
-                Movie movie = new Movie(getImagePath(object.getString(POSTER_PATH)),
-                        object.getString(MOVIE_ID));
+                Movie movie = new Movie(object.getString(MOVIE_ID));
                 movie.setOriginalTitle(object.getString(ORIGINAL_TITLE));
                 movie.setOverview(object.getString(PLOT_SYNOPSIS));
                 movie.setReleaseDate(object.getString(RELEASE_DATE));
                 movie.setVoteAverage(object.getDouble(RATE));
+                movie.setMoviePoster(getImagePath(object.getString(POSTER_PATH)));
 
                 movies.add(i, movie);
             }
@@ -163,6 +239,26 @@ public class GetMovieTask extends AsyncTask<Void, Void, List<Movie>> {
                 }
             }
         }
+    }
+
+    private Uri getTrailersUrl(String movieId) {
+      //  /movie/ {movie_id}/videos
+        Uri uriBuilder = Uri.parse(BASE_URL).buildUpon()
+                .appendEncodedPath(movieId)
+                .appendEncodedPath("videos")
+                .appendQueryParameter(API_QUERY, BuildConfig.MY_MOVIE_DB_API_KEY)
+                .build();
+        return uriBuilder;
+    }
+
+    private Uri getReviewsUrl(String movieId) {
+        //  /movie/ {movie_id}/videos
+        Uri uriBuilder = Uri.parse(BASE_URL).buildUpon()
+                .appendEncodedPath(movieId)
+                .appendEncodedPath("reviews")
+                .appendQueryParameter(API_QUERY, BuildConfig.MY_MOVIE_DB_API_KEY)
+                .build();
+        return uriBuilder;
     }
 
     public boolean isOnline() {

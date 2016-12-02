@@ -1,33 +1,20 @@
 package com.projects.ahmedtarek.movies.fragments;
 
-import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
 import android.content.res.Configuration;
-import android.graphics.Rect;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.projects.ahmedtarek.movies.GetMovieTask;
 import com.projects.ahmedtarek.movies.adapters.DetailViewPagerAdapter;
 import com.projects.ahmedtarek.movies.models.Movie;
 import com.projects.ahmedtarek.movies.interfaces.OnMovieParsedListener;
 import com.projects.ahmedtarek.movies.R;
-import com.projects.ahmedtarek.movies.Utility;
-import com.projects.ahmedtarek.movies.models.Review;
-import com.projects.ahmedtarek.movies.models.Trailer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
